@@ -76,6 +76,9 @@ public final class NFMain {
         NFNewsSource newsSource = new NFNewsSource(url);
         out.println(newsSource);
 
+        //Test that word lists are initialized correctly
+        NFPositivityRanking ranking = new NFPositivityRanking();
+
         /*
          * Close I/O streams.
          */
