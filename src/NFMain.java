@@ -77,7 +77,7 @@ public final class NFMain {
         out.println(newsSource);
 
         //Test that word lists are initialized correctly
-        NFPositivityRanking ranking = new NFPositivityRanking();
+        NFDataModel ranking = new NFDataModel();
 
         /*
          * Close I/O streams.

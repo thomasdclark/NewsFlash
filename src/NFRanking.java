@@ -6,18 +6,16 @@ import components.simplewriter.SimpleWriter;
 import components.simplewriter.SimpleWriter1L;
 
 /**
- * The class that creates the positivity ranking of the news sources. It takes
- * in an array of NFNewsSources and uses a formula on their articles to rank
- * each news source.
+ * The class represents the positivity ranking of a news source.
  * 
  * @author Thomas Clark
  */
-public final class NFPositivityRanking {
+public final class NFRanking {
 
     /**
-     * Array of news sources
+     * The news source that this ranking is for
      */
-    ArrayList<NFNewsSource> newsSources = new ArrayList<NFNewsSource>();
+    NFNewsSource newsSource;
 
     /**
      * Array of positive words
@@ -30,9 +28,22 @@ public final class NFPositivityRanking {
     ArrayList<String> negativeWords = new ArrayList<String>();
 
     /**
+     * Variables used to determine criteria for ranking
+     */
+    int positiveWordCount;
+    int negativeWordCount;
+    double positiveNegativeRatio;
+
+    /**
      * Constructor for NFNewsSource
      */
-    public NFPositivityRanking() {
+    public NFRanking(NFNewsSource newsSource) {
+        //Set news source
+        this.newsSource = newsSource;
+        this.initializeWordLists();
+    }
+
+    void initializeWordLists() {
         //Initialize and fill arrays holding word lists
         SimpleReader positiveIn = new SimpleReader1L(
                 "resources/positive_words.txt");
@@ -42,12 +53,14 @@ public final class NFPositivityRanking {
         while (!positiveIn.atEOS()) {
             String word = positiveIn.nextLine();
             this.positiveWords.add(word);
-            out.println(word); //TEST
         }
         while (!negativeIn.atEOS()) {
             String word = negativeIn.nextLine();
             this.negativeWords.add(word);
-            out.println(word); //TEST
         }
+    }
+
+    void calculateRanking() {
+        //Criteria to determine ranking not yet determined
     }
 }
