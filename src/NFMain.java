@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import components.simplereader.SimpleReader;
 import components.simplereader.SimpleReader1L;
 import components.simplewriter.SimpleWriter;
@@ -29,7 +31,8 @@ public final class NFMain {
     }
 
     /**
-     * Checks input url to make sure it is a valid RSS 2.0 source
+     * Receives and checks url (input by user) to make sure it is a valid RSS
+     * 2.0 source
      */
     public static String getRSS(SimpleReader in, SimpleWriter out) {
         String rssURL = "";
@@ -57,6 +60,40 @@ public final class NFMain {
     }
 
     /**
+     * Checks url to make sure it is a valid RSS 2.0 source
+     */
+    public static boolean checkRSS(String fileName) {
+        boolean validRSS = false;
+        XMLTree xml = new XMLTree1(fileName);
+        if (xml.isTag() && xml.label().equals("rss")) {
+            if (xml.hasAttribute("version")) {
+                if (xml.attributeValue("version").equals("2.0")) {
+                    validRSS = true;
+                }
+            }
+        }
+        return validRSS;
+    }
+
+    /**
+     * Returns instances of NFNewsSource that are taken and created from the
+     * input file
+     */
+    public static ArrayList<NFNewsSource> getNewsSources(String fileName) {
+        ArrayList<NFNewsSource> newsSources = new ArrayList<NFNewsSource>();
+        SimpleReader in = new SimpleReader1L(fileName);
+        String url = "";
+        while (!in.atEOS()) {
+            url = in.nextLine();
+            if (checkRSS(url)) {
+                NFNewsSource newsSource = new NFNewsSource(url);
+                newsSources.add(newsSource);
+            }
+        }
+        return newsSources;
+    }
+
+    /**
      * Main method to begin NewsFlash program
      */
     public static void main(String[] args) {
@@ -66,15 +103,12 @@ public final class NFMain {
         SimpleReader in = new SimpleReader1L();
         SimpleWriter out = new SimpleWriter1L();
 
-        /*
-         * First version: test that NFNewsSource, NFNewsArticle, and NFXMLTree
-         * classes work
-         */
-        out.println("Testing to make sure that written classes and functions work.  Please enter a valid RSS 2.0 news source when asked.\n");
+        String newsFile = "resources/news_sources.txt";
+        ArrayList<NFNewsSource> newsSources = getNewsSources(newsFile);
 
-        String url = getRSS(in, out);
-        NFNewsSource newsSource = new NFNewsSource(url);
-        out.println(newsSource);
+        for (int i = 0; i < newsSources.size(); i++) {
+            out.println(newsSources.get(i));
+        }
 
         //Test that word lists are initialized correctly
         NFDataModel ranking = new NFDataModel();

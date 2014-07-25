@@ -1,0 +1,3 @@
+http://news.yahoo.com/rss/
+http://www.npr.org/rss/rss.php?id=1001
+http://feeds.reuters.com/reuters/topNews
