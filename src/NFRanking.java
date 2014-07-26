@@ -30,6 +30,7 @@ public final class NFRanking {
     /**
      * Variables used to determine criteria for ranking
      */
+    int totalWordCount;
     int positiveWordCount;
     int negativeWordCount;
     double positiveNegativeRatio;
@@ -43,6 +44,8 @@ public final class NFRanking {
         this.initializeWordLists();
         this.positiveWordCount = this.totalPositiveWords();
         this.negativeWordCount = this.totalNegativeWords();
+        this.totalWordCount = this.totalPositiveWords()
+                + this.totalNegativeWords();
     }
 
     /**
@@ -142,7 +145,9 @@ public final class NFRanking {
     public String toString() {
         String toString = "Total Positive Word Count:  "
                 + this.positiveWordCount + "\nTotal Negative Word Count:  "
-                + this.negativeWordCount;
+                + this.negativeWordCount
+                + "\nTotal Positive & Negative Word Count:  "
+                + this.totalWordCount;
         return toString;
     }
 }
