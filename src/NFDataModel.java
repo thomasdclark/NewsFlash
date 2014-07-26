@@ -28,13 +28,48 @@ public final class NFDataModel {
         this.sourcesWithRankings = new HashMap<NFNewsSource, NFRanking>();
     }
 
-    void addNewsSource(NFNewsSource newsSource) {
-        this.newsSources.add(newsSource);
+    /**
+     * Constructor for NFNewsSource, where an ArrayList of news sources is given
+     * initially. A ranking object is created for each news source object.
+     */
+    public NFDataModel(ArrayList<NFNewsSource> newsSources) {
+        this.newsSources = newsSources;
+        this.sourcesWithRankings = new HashMap<NFNewsSource, NFRanking>();
+        for (int i = 0; i < this.newsSources.size(); i++) {
+            NFRanking ranking = this.rankNewsSource(this.newsSources.get(i));
+            this.sourcesWithRankings.put(this.newsSources.get(i), ranking);
+        }
     }
 
+    /**
+     * Adds news source to model
+     */
+    void addNewsSource(NFNewsSource newsSource) {
+        this.newsSources.add(newsSource);
+        NFRanking ranking = this.rankNewsSource(newsSource);
+        this.sourcesWithRankings.put(newsSource, ranking);
+    }
+
+    /**
+     * Creates ranking object for a news source
+     */
     NFRanking rankNewsSource(NFNewsSource newsSource) {
         NFRanking ranking = new NFRanking(newsSource);
-        ranking.calculateRanking();
         return ranking;
+    }
+
+    /**
+     * Override toString() method
+     */
+    @Override
+    public String toString() {
+        String toString = "";
+        for (int i = 0; i < this.newsSources.size(); i++) {
+            NFNewsSource newsSource = this.newsSources.get(i);
+            NFRanking ranking = this.sourcesWithRankings.get(newsSource);
+            toString = toString + newsSource.toString() + "\n"
+                    + ranking.toString() + "\n\n";
+        }
+        return toString;
     }
 }

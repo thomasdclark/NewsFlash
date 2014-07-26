@@ -41,8 +41,13 @@ public final class NFRanking {
         //Set news source
         this.newsSource = newsSource;
         this.initializeWordLists();
+        this.positiveWordCount = this.totalPositiveWords();
+        this.negativeWordCount = this.totalNegativeWords();
     }
 
+    /**
+     * Creates list of positive and negative words
+     */
     void initializeWordLists() {
         //Initialize and fill arrays holding word lists
         SimpleReader positiveIn = new SimpleReader1L(
@@ -60,7 +65,84 @@ public final class NFRanking {
         }
     }
 
+    /**
+     * Counts positive words in an article
+     */
+    int countPositiveWords(NFNewsArticle newsArticle) {
+        int count = 0;
+        for (int i = 0; i < this.positiveWords.size(); i++) {
+            String positiveWord = this.positiveWords.get(i);
+            String description = newsArticle.content;
+            while (description.contains(positiveWord)) {
+                count++;
+                int index = description.indexOf(positiveWord);
+                index += positiveWord.length();
+                description = description.substring(index);
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Counts negative words in an article
+     */
+    int countNegativeWords(NFNewsArticle newsArticle) {
+        int count = 0;
+        for (int i = 0; i < this.negativeWords.size(); i++) {
+            String positiveWord = this.negativeWords.get(i);
+            String description = newsArticle.content;
+            while (description.contains(positiveWord)) {
+                count++;
+                int index = description.indexOf(positiveWord);
+                index += positiveWord.length();
+                description = description.substring(index);
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Counts total number of positive words out of all articles in a news
+     * source
+     */
+    int totalPositiveWords() {
+        int count = 0;
+        for (int i = 0; i < this.newsSource.newsArticles.size(); i++) {
+            NFNewsArticle newsArticle = this.newsSource.newsArticles.get(i);
+            count += this.countPositiveWords(newsArticle);
+        }
+        return count;
+    }
+
+    /**
+     * Counts total number of negative words out of all articles in a news
+     * source
+     */
+    int totalNegativeWords() {
+        int count = 0;
+        for (int i = 0; i < this.newsSource.newsArticles.size(); i++) {
+            NFNewsArticle newsArticle = this.newsSource.newsArticles.get(i);
+            count += this.countNegativeWords(newsArticle);
+        }
+        return count;
+    }
+
+    /**
+     * Creates a number to use to rank this news source against other news
+     * sources
+     */
     void calculateRanking() {
         //Criteria to determine ranking not yet determined
+    }
+
+    /**
+     * Override toString() method
+     */
+    @Override
+    public String toString() {
+        String toString = "Total Positive Word Count:  "
+                + this.positiveWordCount + "\nTotal Negative Word Count:  "
+                + this.negativeWordCount;
+        return toString;
     }
 }

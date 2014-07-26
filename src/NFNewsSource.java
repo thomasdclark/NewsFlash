@@ -95,10 +95,14 @@ public final class NFNewsSource {
     public String toString() {
         String toString = "";
         toString = "News Source:\n     " + this.sourceTitle + "\nArticles:\n";
-        for (int i = 0; i < this.newsArticles.size(); i++) {
+        for (int i = 0; i < this.newsArticles.size() - 1; i++) {
             toString = toString + "     " + this.newsArticles.get(i).toString()
                     + "\n";
         }
+        toString = toString
+                + "     "
+                + this.newsArticles.get(this.newsArticles.size() - 1)
+                        .toString();
         return toString;
     }
 }

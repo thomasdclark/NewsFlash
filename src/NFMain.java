@@ -106,12 +106,8 @@ public final class NFMain {
         String newsFile = "resources/news_sources.txt";
         ArrayList<NFNewsSource> newsSources = getNewsSources(newsFile);
 
-        for (int i = 0; i < newsSources.size(); i++) {
-            out.println(newsSources.get(i));
-        }
-
-        //Test that word lists are initialized correctly
-        NFDataModel ranking = new NFDataModel();
+        NFDataModel model = new NFDataModel(newsSources);
+        out.print(model);
 
         /*
          * Close I/O streams.
