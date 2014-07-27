@@ -1,3 +1,8 @@
-http://news.yahoo.com/rss/
-http://www.npr.org/rss/rss.php?id=1001
-http://feeds.reuters.com/reuters/topNews
+http://news.yahoo.com/rss/world
+http://www.huffingtonpost.com/feeds/verticals/world/index.xml
+http://feeds.reuters.com/reuters/worldNews
+http://feeds.abcnews.com/abcnews/internationalheadlines
+http://feeds.bbci.co.uk/news/world/rss.xml
+http://feeds.nbcnews.com/feeds/worldnews
+http://rss.cnn.com/rss/cnn_world.rss
+http://feeds.foxnews.com/foxnews/world
