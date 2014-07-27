@@ -1,3 +1,8 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import components.xmltree.XMLTree;
 
 /**
@@ -19,6 +24,11 @@ public final class NFNewsArticle {
     String content = "";
 
     /**
+     * The article's link (URL)
+     */
+    String link = "";
+
+    /**
      * Constructor for NFNewsArticle. The root of an article's XMLTree is passed
      * to the constructor so that it's information can be extracted.
      */
@@ -29,11 +39,13 @@ public final class NFNewsArticle {
         } else {
             this.title = "Empty Title";
         }
-        int contentIndex = XMLTreeUtility.getChildElement(item, "media:text");
-        if (contentIndex >= 0) {
-            this.content = item.child(contentIndex).child(0).label();
+        int linkIndex = XMLTreeUtility.getChildElement(item, "link");
+        if (linkIndex >= 0) {
+            this.link = item.child(linkIndex).child(0).label();
+            this.content = this.getHTML(this.link);
         } else {
-            this.content = "Empty Content";
+            this.link = "No link";
+            this.content = "Empty content";
         }
     }
 
@@ -49,6 +61,29 @@ public final class NFNewsArticle {
      */
     String sourceTitle() {
         return this.content;
+    }
+
+    /**
+     * Returns string of html connect from a webpage
+     */
+    public String getHTML(String urlToRead) {
+        String line;
+        String content = "";
+        try {
+            URL url = new URL(urlToRead);
+            HttpURLConnection connection = (HttpURLConnection) url
+                    .openConnection();
+            connection.setRequestMethod("GET");
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    connection.getInputStream()));
+            while ((line = in.readLine()) != null) {
+                content += line;
+            }
+            in.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return content;
     }
 
     /**
