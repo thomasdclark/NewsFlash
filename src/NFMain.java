@@ -108,6 +108,7 @@ public final class NFMain {
 
         NFDataModel model = new NFDataModel(newsSources);
         out.print(model);
+        model.saveToFile();
 
         /*
          * Close I/O streams.

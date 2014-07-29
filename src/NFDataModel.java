@@ -1,6 +1,10 @@
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import components.simplewriter.SimpleWriter;
+import components.simplewriter.SimpleWriter1L;
 
 /**
  * The class that holds the data for this application. Holds an array of
@@ -21,11 +25,17 @@ public final class NFDataModel {
     Map<NFNewsSource, NFRanking> sourcesWithRankings;
 
     /**
+     * The date that this data model was created at
+     */
+    Date date;
+
+    /**
      * Constructor for NFNewsSource
      */
     public NFDataModel() {
         this.newsSources = new ArrayList<NFNewsSource>();
         this.sourcesWithRankings = new HashMap<NFNewsSource, NFRanking>();
+        this.date = new Date();
     }
 
     /**
@@ -35,6 +45,7 @@ public final class NFDataModel {
     public NFDataModel(ArrayList<NFNewsSource> newsSources) {
         this.newsSources = newsSources;
         this.sourcesWithRankings = new HashMap<NFNewsSource, NFRanking>();
+        this.date = new Date();
         for (int i = 0; i < this.newsSources.size(); i++) {
             NFRanking ranking = this.rankNewsSource(this.newsSources.get(i));
             this.sourcesWithRankings.put(this.newsSources.get(i), ranking);
@@ -56,6 +67,24 @@ public final class NFDataModel {
     NFRanking rankNewsSource(NFNewsSource newsSource) {
         NFRanking ranking = new NFRanking(newsSource);
         return ranking;
+    }
+
+    /**
+     * Saves the current data to a text file
+     */
+    void saveToFile() {
+        SimpleWriter out = new SimpleWriter1L("resources/data.txt");
+        out.println(this.date.getTime());
+        for (int i = 0; i < this.newsSources.size() - 1; i++) {
+            out.print(this.newsSources.get(i).sourceTitle);
+            out.print("*");
+            out.println(this.sourcesWithRankings.get(this.newsSources.get(i)).positiveNegativeRatio);
+        }
+        out.print(this.newsSources.get(this.newsSources.size() - 1).sourceTitle);
+        out.print("*");
+        out.print(this.sourcesWithRankings.get(this.newsSources
+                .get(this.newsSources.size() - 1)).positiveNegativeRatio);
+        out.close();
     }
 
     /**
