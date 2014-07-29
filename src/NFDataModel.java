@@ -63,12 +63,34 @@ public final class NFDataModel {
      */
     @Override
     public String toString() {
-        String toString = "";
+        String toString = "News Sources to be analyzed:\n";
+        ArrayList<NFRanking> newsRanked = new ArrayList<NFRanking>();
         for (int i = 0; i < this.newsSources.size(); i++) {
             NFNewsSource newsSource = this.newsSources.get(i);
+            toString = toString + "    " + newsSource.sourceTitle + "\n";
             NFRanking ranking = this.sourcesWithRankings.get(newsSource);
-            toString = toString + newsSource.toString() + "\n"
-                    + ranking.toString() + "\n\n";
+            if (newsRanked.size() == 0) {
+                newsRanked.add(ranking);
+            } else {
+                int size = newsRanked.size();
+                for (int j = 0; j < newsRanked.size(); j++) {
+                    if (ranking.positiveNegativeRatio < newsRanked.get(j).positiveNegativeRatio) {
+                        newsRanked.add(j, ranking);
+                        break;
+                    }
+                }
+                if (size == newsRanked.size()) {
+                    newsRanked.add(ranking);
+                }
+            }
+        }
+        toString = toString
+                + "\nNews Sources ranked (from least to most positive):\n";
+        for (int i = 0; i < newsRanked.size(); i++) {
+            NFRanking ranking = newsRanked.get(i);
+            NFNewsSource newsSource = ranking.newsSource;
+            toString = toString + "    " + newsSource.sourceTitle + " ("
+                    + ranking.positiveNegativeRatio + ")\n";
         }
         return toString;
     }
