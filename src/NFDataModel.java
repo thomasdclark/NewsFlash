@@ -73,7 +73,8 @@ public final class NFDataModel {
      * Saves the current data to a text file
      */
     void saveToFile() {
-        SimpleWriter out = new SimpleWriter1L("resources/data.txt");
+        SimpleWriter out = new SimpleWriter1L("data/" + this.date.getTime()
+                + ".txt");
         out.println(this.date.getTime());
         for (int i = 0; i < this.newsSources.size() - 1; i++) {
             out.print(this.newsSources.get(i).sourceTitle);
