@@ -46,6 +46,8 @@ public final class NFRanking {
         this.negativeWordCount = this.totalNegativeWords();
         this.totalWordCount = this.totalPositiveWords()
                 + this.totalNegativeWords();
+        this.positiveNegativeRatio = (double) this.positiveWordCount
+                / (double) this.negativeWordCount;
     }
 
     /**
@@ -131,14 +133,6 @@ public final class NFRanking {
     }
 
     /**
-     * Creates a number to use to rank this news source against other news
-     * sources
-     */
-    void calculateRanking() {
-        //Criteria to determine ranking not yet determined
-    }
-
-    /**
      * Override toString() method
      */
     @Override
@@ -147,7 +141,8 @@ public final class NFRanking {
                 + this.positiveWordCount + "\nTotal Negative Word Count:  "
                 + this.negativeWordCount
                 + "\nTotal Positive & Negative Word Count:  "
-                + this.totalWordCount;
+                + this.totalWordCount + "\nPositive-to-Negative Ratio:  "
+                + this.positiveNegativeRatio;
         return toString;
     }
 }
