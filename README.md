@@ -1,17 +1,15 @@
 #NewsFlash
-NewsFlash is a data analysis application that parses the daily articles written by your favorite news sources, calculates the overall positivity/negativity of the individual articles and news sources as a whole, and ranks the news sources from most positive to most negative.  Ideally, NewsFlash is to be used with news sources that are reporting on similar events in order to obtain an objective analysis of equal news content.  The goal of NewsFlash is to prove that some news sources take a more pessimistic approach to reporting the news, which can greatly affect the reader's take away and overall understanding of what actually happened.
+NewsFlash is an application for analyzing online news sources and ranking them based on the positivity of their content.  The application receives a user input file containing the links to the RSS feeds of various news feeds.  It then uses the RSS feeds to link to and parse the webpages of the articles currently being featured on the news sites.  The content of these news articles is then crawled to count key positive and negative words, which NewsFlash uses to create an overall ranking of the news sites.  Users can customize NewsFlash based on the positive and negative words that it uses, as well as the news sources that it ranks.  The goal of NewsFlash is to allow users to hopefully see how their favorite news sources compare to each other based on the positivity of their content, and to reflect on how this can affect the overall take away and meaning of the content.
 
 ##Current Functionality
-Accepts a user input URL to an RSS 2.0 news source feed and outputs to the console the name of the news source along with all of the articles that it has written.
+Receives the RSS feeds of the news sources from resources/news_sources.txt.  Ranks the content of these news sources based on the positive words found in resources/positive_words.txt and the negative words found in resources/negative_words.txt.  All of these text files can be customized to change the news sources analyzed, as well as the words used to create these rankings.
 
-![NewsFlash](https://raw.githubusercontent.com/thomasdclark/NewsFlash/master/resources/current_functionality.png)
+![NewsFlash](https://raw.githubusercontent.com/thomasdclark/NewsFlash/master/resources/app_functionality.png)
 
 ##Future Goals
-* Complete advertised functionality using command line interface
-* Simple GUI design to allow users to choose news sources to parse and analyze
-* Automatic daily article retrieval and analysis for saved news sources
-* Graphing functionality to see day-to-day changes in positivity rankings
+* Save feature to save the results every time the application is run
+* Graphing functionality to see the results over time
 
-##Third-Party Libraries
+##Dependencies
 Need to be downloaded from respective sites prior to use:
 * [OSU CSE Components](http://web.cse.ohio-state.edu/software/common/doc/)
