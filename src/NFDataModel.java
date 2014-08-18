@@ -1,3 +1,4 @@
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,12 +31,19 @@ public final class NFDataModel {
     Date date;
 
     /**
+     * The string representing the date
+     */
+    String dateString;
+
+    /**
      * Constructor for NFNewsSource
      */
     public NFDataModel() {
         this.newsSources = new ArrayList<NFNewsSource>();
         this.sourcesWithRankings = new HashMap<NFNewsSource, NFRanking>();
         this.date = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("MMM dd hh:mm a");
+        this.dateString = df.format(this.date);
     }
 
     /**
@@ -46,6 +54,8 @@ public final class NFDataModel {
         this.newsSources = newsSources;
         this.sourcesWithRankings = new HashMap<NFNewsSource, NFRanking>();
         this.date = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("MMM dd hh:mm a");
+        this.dateString = df.format(this.date);
         for (int i = 0; i < this.newsSources.size(); i++) {
             NFRanking ranking = this.rankNewsSource(this.newsSources.get(i));
             this.sourcesWithRankings.put(this.newsSources.get(i), ranking);
@@ -76,6 +86,7 @@ public final class NFDataModel {
         SimpleWriter out = new SimpleWriter1L("data/" + this.date.getTime()
                 + ".txt");
         out.println(this.date.getTime());
+        out.println(this.dateString);
         for (int i = 0; i < this.newsSources.size() - 1; i++) {
             out.print(this.newsSources.get(i).sourceTitle);
             out.print("*");
@@ -114,6 +125,8 @@ public final class NFDataModel {
                 }
             }
         }
+        toString = toString + "\nRanking date and time:  " + this.dateString
+                + "\n";
         toString = toString
                 + "\nNews Sources ranked (from least to most positive):\n";
         for (int i = 0; i < newsRanked.size(); i++) {

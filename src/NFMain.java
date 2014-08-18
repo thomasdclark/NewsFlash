@@ -103,6 +103,8 @@ public final class NFMain {
         SimpleReader in = new SimpleReader1L();
         SimpleWriter out = new SimpleWriter1L();
 
+        out.println("News Flash: News Source Positivity Ranking Program");
+        out.println("Program may take a few minutes to analyze news content.");
         String newsFile = "resources/news_sources.txt";
         ArrayList<NFNewsSource> newsSources = getNewsSources(newsFile);
 

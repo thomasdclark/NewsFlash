@@ -59,7 +59,7 @@ public final class NFNewsArticle {
     /**
      * Returns the news article's content
      */
-    String sourceTitle() {
+    String content() {
         return this.content;
     }
 
@@ -79,9 +79,10 @@ public final class NFNewsArticle {
             while ((line = in.readLine()) != null) {
                 content += line;
             }
+            System.out.println("Retrieved article:  " + this.title);
             in.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Unable to retrieved article:  " + this.title);
         }
         return content;
     }
