@@ -1,5 +1,6 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import components.simplereader.SimpleReader;
 import components.simplereader.SimpleReader1L;
@@ -19,7 +20,8 @@ public final class NFGraph {
 
     class DataForDate {
         String date;
-        Long xValue;
+        long xValueLong;
+        int xValue;
         ArrayList<DataPoint> dataPoints;
 
         DataForDate() {
@@ -38,14 +40,26 @@ public final class NFGraph {
     public NFGraph() {
         this.allDatesData = new ArrayList<DataForDate>();
         File data = new File("data");
-        Long lowestXValue;
+        long lowestXValue = 0l;
         File[] listOfFiles = data.listFiles();
         if (listOfFiles.length != 0) {
+            long fileArray[] = new long[listOfFiles.length];
             for (int i = 0; i < listOfFiles.length; i++) {
                 File file = listOfFiles[i];
+                fileArray[i] = Long.parseLong(file.getName()
+                        .replace(".txt", ""));
+            }
+            Arrays.sort(fileArray);
+            for (int i = 0; i < fileArray.length; i++) {
                 DataForDate date = new DataForDate();
-                SimpleReader fileIn = new SimpleReader1L(file.toString());
-                date.xValue = Long.parseLong(fileIn.nextLine());
+                SimpleReader fileIn = new SimpleReader1L("data/" + fileArray[i]
+                        + ".txt");
+                date.xValueLong = Long.parseLong(fileIn.nextLine());
+                if (i == 0) {
+                    lowestXValue = date.xValueLong;
+                } else if (date.xValue < lowestXValue) {
+                    lowestXValue = date.xValueLong;
+                }
                 date.date = fileIn.nextLine();
                 while (!fileIn.atEOS()) {
                     DataPoint point = new DataPoint();
@@ -57,6 +71,11 @@ public final class NFGraph {
                     date.dataPoints.add(point);
                 }
                 this.allDatesData.add(date);
+            }
+            for (int i = 0; i < this.allDatesData.size(); i++) {
+                long xValueLong = this.allDatesData.get(i).xValueLong;
+                Long newXValueLong = xValueLong - lowestXValue;
+                this.allDatesData.get(i).xValue = newXValueLong.intValue();
             }
         }
     }
