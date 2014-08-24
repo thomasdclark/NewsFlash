@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 
 import components.simplereader.SimpleReader;
@@ -103,14 +104,21 @@ public final class NFMain {
         SimpleReader in = new SimpleReader1L();
         SimpleWriter out = new SimpleWriter1L();
 
-        out.println("News Flash: News Source Positivity Ranking Program");
-        out.println("Program may take a few minutes to analyze news content.");
-        String newsFile = "resources/news_sources.txt";
-        ArrayList<NFNewsSource> newsSources = getNewsSources(newsFile);
+        NFGraph graph = new NFGraph();
+        try {
+            graph.displayGraph();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        NFDataModel model = new NFDataModel(newsSources);
-        out.print(model);
-        model.saveToFile();
+        //out.println("News Flash: News Source Positivity Ranking Program");
+        //out.println("Program may take a few minutes to analyze news content.");
+        //String newsFile = "resources/news_sources.txt";
+        //ArrayList<NFNewsSource> newsSources = getNewsSources(newsFile);
+
+        //NFDataModel model = new NFDataModel(newsSources);
+        //out.print(model);
+        //model.saveToFile();
 
         /*
          * Close I/O streams.
