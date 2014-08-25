@@ -36,14 +36,21 @@ public final class NFDataModel {
     String dateString;
 
     /**
+     * The string representing the date
+     */
+    String timeString;
+
+    /**
      * Constructor for NFNewsSource
      */
     public NFDataModel() {
         this.newsSources = new ArrayList<NFNewsSource>();
         this.sourcesWithRankings = new HashMap<NFNewsSource, NFRanking>();
         this.date = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("MMM dd hh:mm a");
-        this.dateString = df.format(this.date);
+        SimpleDateFormat df1 = new SimpleDateFormat("MMM dd");
+        SimpleDateFormat df2 = new SimpleDateFormat("hh:mm a");
+        this.dateString = df1.format(this.date);
+        this.timeString = df2.format(this.date);
     }
 
     /**
@@ -54,8 +61,10 @@ public final class NFDataModel {
         this.newsSources = newsSources;
         this.sourcesWithRankings = new HashMap<NFNewsSource, NFRanking>();
         this.date = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("MMM dd hh:mm a");
-        this.dateString = df.format(this.date);
+        SimpleDateFormat df1 = new SimpleDateFormat("MMM dd");
+        SimpleDateFormat df2 = new SimpleDateFormat("hh:mm a");
+        this.dateString = df1.format(this.date);
+        this.timeString = df2.format(this.date);
         for (int i = 0; i < this.newsSources.size(); i++) {
             NFRanking ranking = this.rankNewsSource(this.newsSources.get(i));
             this.sourcesWithRankings.put(this.newsSources.get(i), ranking);
@@ -87,6 +96,7 @@ public final class NFDataModel {
                 + ".txt");
         out.println(this.date.getTime());
         out.println(this.dateString);
+        out.println(this.timeString);
         for (int i = 0; i < this.newsSources.size() - 1; i++) {
             out.print(this.newsSources.get(i).sourceTitle);
             out.print("*");

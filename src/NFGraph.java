@@ -13,16 +13,14 @@ import com.googlecode.charts4j.AxisLabels;
 import com.googlecode.charts4j.AxisLabelsFactory;
 import com.googlecode.charts4j.AxisStyle;
 import com.googlecode.charts4j.AxisTextAlignment;
+import com.googlecode.charts4j.BarChart;
+import com.googlecode.charts4j.BarChartPlot;
 import com.googlecode.charts4j.Color;
 import com.googlecode.charts4j.DataUtil;
 import com.googlecode.charts4j.Fills;
 import com.googlecode.charts4j.GCharts;
-import com.googlecode.charts4j.Line;
-import com.googlecode.charts4j.LineChart;
-import com.googlecode.charts4j.LineStyle;
 import com.googlecode.charts4j.LinearGradientFill;
 import com.googlecode.charts4j.Plots;
-import com.googlecode.charts4j.Shape;
 import components.simplereader.SimpleReader;
 import components.simplereader.SimpleReader1L;
 
@@ -58,13 +56,24 @@ public final class NFGraph {
     /**
      * Array of lines to be plotted
      */
-    ArrayList<Line> lines;
+    ArrayList<BarChartPlot> plots;
 
+    /**
+     * The date strings in the order that they will appear the the plot
+     */
     String dateStrings[];
 
-    Double dateStringPoisitons[];
-
+    /**
+     * The maximum ranking in all the data that is to be plotted
+     */
     double max;
+
+    /**
+     * The number of dates to be plotted. If you want to change this number, you
+     * also need to tinker with the chart size in the createBarChart() method to
+     * make everything fit into the JFrame
+     */
+    final int PLOT_DATA_SIZE = 4;
 
     /**
      * Constructor for NFNewsSource
@@ -82,12 +91,13 @@ public final class NFGraph {
             }
             Arrays.sort(fileArray);
             long lowestXValue = fileArray[0];
-            for (int i = 0; i < fileArray.length; i++) {
+            for (int i = (fileArray.length - this.PLOT_DATA_SIZE); i < fileArray.length; i++) {
                 DataForDate date = new DataForDate();
                 SimpleReader fileIn = new SimpleReader1L("data/" + fileArray[i]
                         + ".txt");
                 date.xValueLong = Long.parseLong(fileIn.nextLine());
                 date.date = fileIn.nextLine();
+                String time = fileIn.nextLine();
                 while (!fileIn.atEOS()) {
                     DataPoint point = new DataPoint();
                     String line = fileIn.nextLine();
@@ -108,19 +118,15 @@ public final class NFGraph {
     }
 
     /**
-     * Creates the lines to be plotted
+     * Creates the individual bar chart plots to be plotted
      */
-    public void createLines() {
-        this.lines = new ArrayList<Line>();
+    public void createBarChartPlots() {
+        this.plots = new ArrayList<BarChartPlot>();
         int numberOfDates = this.allDatesData.size();
         int newsSourceSize = this.allDatesData.get(0).dataPoints.size();
         this.dateStrings = new String[numberOfDates];
-        this.dateStringPoisitons = new Double[numberOfDates];
-        double[] x = new double[numberOfDates];
         for (int i = 0; i < numberOfDates; i++) {
-            x[i] = this.allDatesData.get(i).xValue / (1000.0);
             this.dateStrings[i] = this.allDatesData.get(i).date;
-            this.dateStringPoisitons[i] = 100.0 * (i / (double) numberOfDates);
         }
         this.max = 0.0;
         for (int i = 0; i < newsSourceSize; i++) {
@@ -157,13 +163,13 @@ public final class NFGraph {
                     color = Color.MAGENTA;
                     break;
                 case 6:
-                    color = Color.PINK;
+                    color = Color.CYAN;
                     break;
                 case 7:
                     color = Color.BLACK;
                     break;
                 case 8:
-                    color = Color.CYAN;
+                    color = Color.PINK;
                     break;
                 case 9:
                     color = Color.WHITE;
@@ -178,36 +184,53 @@ public final class NFGraph {
                     color = Color.WHITE;
                     break;
             }
-            Line line = Plots.newLine(
+            BarChartPlot plot = Plots.newBarChartPlot(
                     DataUtil.scaleWithinRange(0, this.max, y), color, name);
-            line.setLineStyle(LineStyle.newLineStyle(3, 1, 0));
-            line.addShapeMarkers(Shape.DIAMOND, color, 12);
-            line.addShapeMarkers(Shape.DIAMOND, Color.WHITE, 8);
-            this.lines.add(line);
+            this.plots.add(plot);
         }
     }
 
     /**
-     * Creates the graph of data
+     * Creates the bar chart of data
      */
-    public String createGraph() {
-        LineChart chart = GCharts.newLineChart(this.lines);
-        chart.setSize(700, 400);
-        chart.setTitle("New Sources Positivity Rankings", Color.WHITE, 14);
-        chart.setGrid(100, 100, 1, 0);
-        chart.setBackgroundFill(Fills.newSolidFill(Color.newColor("1F1D1D")));
-        LinearGradientFill fill = Fills.newLinearGradientFill(0,
-                Color.newColor("363433"), 100);
-        fill.addColorAndOffset(Color.newColor("2E2B2A"), 0);
-        chart.setAreaFill(fill);
-        AxisStyle axisStyle = AxisStyle.newAxisStyle(Color.WHITE, 10,
-                AxisTextAlignment.CENTER);
+    public String createBarChart() {
+        BarChart chart = GCharts.newBarChart(this.plots);
 
-        AxisLabels xAxis = AxisLabelsFactory.newAxisLabels(
-                Arrays.asList(this.dateStrings),
-                Arrays.asList(this.dateStringPoisitons));
-        xAxis.setAxisStyle(axisStyle);
-        chart.addXAxisLabels(xAxis);
+        AxisStyle axisStyle = AxisStyle.newAxisStyle(Color.BLACK, 12,
+                AxisTextAlignment.CENTER);
+        AxisLabels date = AxisLabelsFactory.newAxisLabels("Date", 50.0);
+        date.setAxisStyle(AxisStyle.newAxisStyle(Color.BLACK, 14,
+                AxisTextAlignment.CENTER));
+        AxisLabels dateStrings = AxisLabelsFactory
+                .newAxisLabels(this.dateStrings);
+        dateStrings.setAxisStyle(axisStyle);
+        AxisLabels ranking = AxisLabelsFactory.newAxisLabels("Ranking", 50.0);
+        ranking.setAxisStyle(AxisStyle.newAxisStyle(Color.BLACK, 14,
+                AxisTextAlignment.CENTER));
+        AxisLabels rankingRange = AxisLabelsFactory.newNumericRangeAxisLabels(
+                0, this.max);
+        rankingRange.setAxisStyle(axisStyle);
+
+        chart.addXAxisLabels(rankingRange);
+        chart.addXAxisLabels(ranking);
+        chart.addYAxisLabels(dateStrings);
+        chart.addYAxisLabels(date);
+        chart.addTopAxisLabels(rankingRange);
+
+        chart.setTitle("New Source Positivity Rankings by Date", Color.BLACK,
+                16);
+        chart.setHorizontal(true);
+        chart.setSize(650, 450);
+        chart.setSpaceBetweenGroupsOfBars(10);
+        chart.setSpaceWithinGroupsOfBars(0);
+        chart.setBarWidth(10);
+        chart.setGrid((3.0 / this.max) * 20, 600, 3, 2);
+        chart.setBackgroundFill(Fills.newSolidFill(Color.WHITE));
+        LinearGradientFill fill = Fills.newLinearGradientFill(0,
+                Color.LIGHTGREY, 100);
+        fill.addColorAndOffset(Color.LIGHTGREY, 0);
+        chart.setAreaFill(fill);
+
         String urlString = chart.toURLString();
         return urlString;
     }
@@ -215,14 +238,15 @@ public final class NFGraph {
     /**
      * Displays (makes visible) the graph of data
      */
-    public void displayGraph() throws IOException {
-        this.createLines();
-        String urlString = this.createGraph();
+    public void displayPlot() throws IOException {
+        this.createBarChartPlots();
+        String urlString = this.createBarChart();
         JLabel plot = new JLabel(
                 new ImageIcon(ImageIO.read(new URL(urlString))));
         JFrame frame = new JFrame("New Sources Positivity Rankings");
         frame.add(plot);
         frame.pack();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
 }

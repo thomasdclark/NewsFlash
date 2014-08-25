@@ -106,7 +106,7 @@ public final class NFMain {
 
         NFGraph graph = new NFGraph();
         try {
-            graph.displayGraph();
+            graph.displayPlot();
         } catch (IOException e) {
             e.printStackTrace();
         }
