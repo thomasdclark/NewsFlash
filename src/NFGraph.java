@@ -249,7 +249,7 @@ public final class NFGraph {
         JFrame frame = new JFrame("New Sources Positivity Rankings");
         frame.add(plot);
         frame.pack();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
     }
 }

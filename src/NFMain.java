@@ -104,21 +104,45 @@ public final class NFMain {
         SimpleReader in = new SimpleReader1L();
         SimpleWriter out = new SimpleWriter1L();
 
-        NFGraph graph = new NFGraph();
-        try {
-            graph.displayPlot();
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean quit = false;
+        out.println("Welcome to the NewsFlash News Source Positivity Ranking Program");
+        while (!quit) {
+            out.print("What would you like to do (track, graph, quit, help):  ");
+            String input = in.nextLine();
+            input = input.toLowerCase();
+            if (input.equals("track")) {
+                out.println("  Now tracking current news source positivity.");
+                out.println("  Program may take a few minutes to analyze news content.");
+                String newsFile = "resources/news_sources.txt";
+                ArrayList<NFNewsSource> newsSources = getNewsSources(newsFile);
+                NFDataModel model = new NFDataModel(newsSources);
+                out.print(model);
+                model.saveToFile();
+            } else if (input.equals("graph")) {
+                out.println("  Now graphing past positivity data.");
+                NFGraph graph = new NFGraph();
+                try {
+                    graph.displayPlot();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (input.equals("quit")) {
+                out.println("Thank you for using NewsFlash.");
+                quit = true;
+            } else if (input.equals("help")) {
+                out.println("  NewsFlash is a program that you can use to track the positivity of your favorite news sources.");
+                out.println("  Use the file resources/news_sources.txt to add links to the RSS feeds of the news_sources that you want to track.");
+                out.println("  For each news source that you choose to track, this program will go to all of its articles and determine a positivity ratio based on the number of positve to negative words.");
+                out.println("  You can change the positive or negative word lists that a used in the resources directory.");
+                out.println("  At the beginning of each program, you are asked to input 'track', 'graph', or 'quit'.");
+                out.println("  Choosing 'track' will make the program track the positivity for each news source for the current date and time.");
+                out.println("  All of the data the program collects is stored in the data directory.");
+                out.println("  Choosing 'graph' will make the program graph the data from the past four trackings.");
+                out.println("  Choosing 'quit' will alloq you to quit out of the program.");
+            } else {
+                out.println("  Input not understood.  Please try again.");
+            }
         }
-
-        //out.println("News Flash: News Source Positivity Ranking Program");
-        //out.println("Program may take a few minutes to analyze news content.");
-        //String newsFile = "resources/news_sources.txt";
-        //ArrayList<NFNewsSource> newsSources = getNewsSources(newsFile);
-
-        //NFDataModel model = new NFDataModel(newsSources);
-        //out.print(model);
-        //model.saveToFile();
 
         /*
          * Close I/O streams.

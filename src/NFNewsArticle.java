@@ -79,10 +79,11 @@ public final class NFNewsArticle {
             while ((line = in.readLine()) != null) {
                 content += line;
             }
-            System.out.println("Retrieved article:  " + this.title);
+            System.out.println("    Retrieved article:  " + this.title);
             in.close();
         } catch (Exception e) {
-            System.out.println("Unable to retrieved article:  " + this.title);
+            System.out.println("    Unable to retrieved article:  "
+                    + this.title);
         }
         return content;
     }
