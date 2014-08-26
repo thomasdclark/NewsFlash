@@ -39,6 +39,7 @@ public final class NFGraph {
 
     class DataForDate {
         String date;
+        String time;
         long xValueLong;
         int xValue;
         ArrayList<DataPoint> dataPoints;
@@ -97,7 +98,7 @@ public final class NFGraph {
                         + ".txt");
                 date.xValueLong = Long.parseLong(fileIn.nextLine());
                 date.date = fileIn.nextLine();
-                String time = fileIn.nextLine();
+                date.time = fileIn.nextLine();
                 while (!fileIn.atEOS()) {
                     DataPoint point = new DataPoint();
                     String line = fileIn.nextLine();
@@ -126,7 +127,8 @@ public final class NFGraph {
         int newsSourceSize = this.allDatesData.get(0).dataPoints.size();
         this.dateStrings = new String[numberOfDates];
         for (int i = 0; i < numberOfDates; i++) {
-            this.dateStrings[i] = this.allDatesData.get(i).date;
+            this.dateStrings[i] = this.allDatesData.get(i).date + " "
+                    + this.allDatesData.get(i).time;
         }
         this.max = 0.0;
         for (int i = 0; i < newsSourceSize; i++) {
@@ -196,16 +198,17 @@ public final class NFGraph {
     public String createBarChart() {
         BarChart chart = GCharts.newBarChart(this.plots);
 
-        AxisStyle axisStyle = AxisStyle.newAxisStyle(Color.BLACK, 12,
+        AxisStyle axisStyle = AxisStyle.newAxisStyle(Color.BLACK, 10,
                 AxisTextAlignment.CENTER);
         AxisLabels date = AxisLabelsFactory.newAxisLabels("Date", 50.0);
-        date.setAxisStyle(AxisStyle.newAxisStyle(Color.BLACK, 14,
+        date.setAxisStyle(AxisStyle.newAxisStyle(Color.BLACK, 12,
                 AxisTextAlignment.CENTER));
         AxisLabels dateStrings = AxisLabelsFactory
                 .newAxisLabels(this.dateStrings);
-        dateStrings.setAxisStyle(axisStyle);
+        dateStrings.setAxisStyle(AxisStyle.newAxisStyle(Color.BLACK, 10,
+                AxisTextAlignment.CENTER));
         AxisLabels ranking = AxisLabelsFactory.newAxisLabels("Ranking", 50.0);
-        ranking.setAxisStyle(AxisStyle.newAxisStyle(Color.BLACK, 14,
+        ranking.setAxisStyle(AxisStyle.newAxisStyle(Color.BLACK, 12,
                 AxisTextAlignment.CENTER));
         AxisLabels rankingRange = AxisLabelsFactory.newNumericRangeAxisLabels(
                 0, this.max);
@@ -218,13 +221,13 @@ public final class NFGraph {
         chart.addTopAxisLabels(rankingRange);
 
         chart.setTitle("New Source Positivity Rankings by Date", Color.BLACK,
-                16);
+                14);
         chart.setHorizontal(true);
-        chart.setSize(650, 450);
+        chart.setSize(689, 435);
         chart.setSpaceBetweenGroupsOfBars(10);
         chart.setSpaceWithinGroupsOfBars(0);
         chart.setBarWidth(10);
-        chart.setGrid((3.0 / this.max) * 20, 600, 3, 2);
+        chart.setGrid(10.0 / this.max, 600, 3, 2);
         chart.setBackgroundFill(Fills.newSolidFill(Color.WHITE));
         LinearGradientFill fill = Fills.newLinearGradientFill(0,
                 Color.LIGHTGREY, 100);
