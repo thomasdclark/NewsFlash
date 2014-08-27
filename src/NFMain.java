@@ -127,7 +127,7 @@ public final class NFMain {
                     e.printStackTrace();
                 }
             } else if (input.equals("quit")) {
-                out.println("Thank you for using NewsFlash.");
+                out.print("Thank you for using NewsFlash.");
                 quit = true;
             } else if (input.equals("help")) {
                 out.println("  NewsFlash is a program that you can use to track the positivity of your favorite news sources.");
@@ -136,7 +136,7 @@ public final class NFMain {
                 out.println("  You can change the positive or negative word lists that a used in the resources directory.");
                 out.println("  At the beginning of each program, you are asked to input 'track', 'graph', or 'quit'.");
                 out.println("  Choosing 'track' will make the program track the positivity for each news source for the current date and time.");
-                out.println("  All of the data the program collects is stored in the data directory.");
+                out.println("  All of the data the program collects is stored in the /data directory.");
                 out.println("  Choosing 'graph' will make the program graph the data from the past four trackings.");
                 out.println("  Choosing 'quit' will alloq you to quit out of the program.");
             } else {
